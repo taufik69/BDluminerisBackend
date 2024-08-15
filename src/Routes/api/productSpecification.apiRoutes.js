@@ -1,6 +1,6 @@
 import { Router } from "express";
 import {
-  getAllProduct,
+  getAllProductSpecification,
   productspecificationcontroller,
 } from "../../Controller/prouductSpecification.controller.js";
 import { upload } from "../../middleware/multer.middleware.js";
@@ -19,6 +19,6 @@ router
     multerError,
     productspecificationcontroller
   )
-  .get(getAllProduct);
+  .get(getAllProductSpecification);
 
 export default router;

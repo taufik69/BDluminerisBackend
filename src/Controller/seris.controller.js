@@ -3,7 +3,10 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/AsyncHandler.js";
 import { serisModel } from "../Model/Seris.model.js";
 import { GroupModel } from "../Model/Group.model.js";
+import fs from "fs";
+import path from "path";
 
+// post seris
 const serisController = asyncHandler(async (req, res) => {
   const { Title, groups } = req.body;
 
@@ -69,14 +72,49 @@ const serisController = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, newseris, `${Title} Seris  Created Sucessfull`));
 });
 
+// get all products with the help of moongoose find method
 const getAllSeris = asyncHandler(async (req, res) => {
   const getAllProductTypeOneController = await serisModel
     .find({})
-    .populate("group");
+    .populate([
+      "group",
+      "subSeris",
+      "productTechnicalSpecification",
+      "product",
+    ]);
 
   return res
     .status(200)
     .json(new ApiResponse(200, getAllProductTypeOneController));
 });
 
-export { serisController, getAllSeris };
+// delete the seris with the help of id
+const DeleteSeris = asyncHandler(async (req, res) => {
+  try {
+    const deletedProduct = await serisModel.findOneAndDelete({
+      _id: req.params?.id,
+    });
+
+    const deleteImagePath = path.join(
+      "./public/temp/",
+      deletedProduct?.image?.split("/").slice(3).join("/")
+    );
+
+    fs.unlink(deleteImagePath, (err) => {
+      if (err) {
+        return res
+          .status(400)
+          .json(new ApiResponse(400, null, `Seris error: ${err}`));
+      }
+    });
+    return res
+      .status(200)
+      .json(new ApiResponse(200, deletedProduct, "Delete Seris Sucessfull"));
+  } catch (error) {
+    return res
+      .status(400)
+      .json(new ApiResponse(400, null, `Delete  seris error: ${error}`));
+  }
+});
+
+export { serisController, getAllSeris, DeleteSeris };

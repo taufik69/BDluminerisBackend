@@ -53,9 +53,31 @@ const subSerisController = asyncHandler(async (req, res) => {
     );
 });
 
+/**
+ * todo : get allSubseris handeler getAllsubseris
+ * method : find({})
+ */
 const getAllsubseris = asyncHandler(async (req, res) => {
-  const getAllProductsubseris = await subserisModel.find({});
+  const getAllProductsubseris = await subserisModel
+    .find({})
+    .populate(["seris", "productTechnicalSpecification", "product"]);
   return res.status(200).json(new ApiResponse(200, getAllProductsubseris));
 });
 
-export { subSerisController, getAllsubseris };
+// delte subsris
+const Deletesubseris = asyncHandler(async (req, res) => {
+  const getAllProductsubseris = await subserisModel.findOneAndDelete({
+    _id: req.params?.id,
+  });
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        null,
+        getAllProductsubseris.Title + " delete sucessfull"
+      )
+    );
+});
+export { subSerisController, getAllsubseris, Deletesubseris };

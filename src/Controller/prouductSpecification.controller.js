@@ -36,8 +36,9 @@ const productspecificationcontroller = asyncHandler(async (req, res) => {
 
   const productSpecificationImage = req.files?.productImages;
   const productSpecificationVedio = req.files?.vedio;
+  console.log(productSpecificationVedio);
 
-  if (!productSpecificationImage.length) {
+  if (!productSpecificationImage?.length) {
     return res
       .status(400)
       .json(new ApiError(400, null, `productSpecificationImage is Missing !!`));
@@ -52,7 +53,7 @@ const productspecificationcontroller = asyncHandler(async (req, res) => {
   productSpecificationObj["productSpecificationImages"] =
     `${process.env.DOMAIN_NAME}/${req.headers["x-uploaddestination"]}/${productSpecificationImage[0].filename}`;
 
-  if (productSpecificationVedio.length) {
+  if (productSpecificationVedio?.length) {
     productSpecificationObj["productSpecificationvedio"] =
       `${process.env.DOMAIN_NAME}/${req.headers["x-uploaddestination"]}/${productSpecificationVedio[0].filename}`;
   }
@@ -63,8 +64,9 @@ const productspecificationcontroller = asyncHandler(async (req, res) => {
   const isExistProductSpecification = await productspecificationModel.find({
     productItemCode: req.body?.productSeris,
   });
+  console.log(isExistProductSpecification);
 
-  if (isExistProductSpecification.length) {
+  if (isExistProductSpecification?.length) {
     return res
       .status(400)
       .json(new ApiError(400, null, `This product  is Already Exist `));
@@ -113,20 +115,30 @@ const productspecificationcontroller = asyncHandler(async (req, res) => {
     );
 });
 
-const getAllProduct = asyncHandler(async (req, res) => {
-  const allProduct = await productModel
+const getAllProductSpecification = asyncHandler(async (req, res) => {
+  const ProductSpecificaiton = await productspecificationModel
     .find({})
-    .populate("productCatagory")
-    .populate("productTypeOne")
-    .populate("productTypeTwo")
-    .populate("productIpList")
-    .populate("productUnitList")
-    .populate("productCct")
-    .populate("productBeamAngle")
-    .populate("productReflectorType")
-    .populate("productDimming");
+    .populate([
+      "productIpGrade",
+      "productDimming",
+      "productCct",
+      "productMounting",
+      "productSeris",
+      "productSubSeris",
+    ])
+    .populate({
+      path: "productGroup",
+    });
 
-  return res.status(200).json(new ApiResponse(200, allProduct));
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        ProductSpecificaiton,
+        "Get  All product Specification sucessfull"
+      )
+    );
 });
 
-export { productspecificationcontroller, getAllProduct };
+export { productspecificationcontroller, getAllProductSpecification };

@@ -4,6 +4,8 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { productModel } from "../Model/product.model.js";
 import { serisModel } from "../Model/Seris.model.js";
 import { subserisModel } from "../Model/SubSeris.model.js";
+import fs from "fs";
+import path from "path";
 
 const ProductController = asyncHandler(async (req, res, next) => {
   const {
@@ -140,7 +142,9 @@ const getAllProduct = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, productList, "All Products Fetch Sucessfull"));
 });
 
-// get specific product of this db
+/**
+ * todo : get single product annd see all Field
+ */
 
 const getProduct = asyncHandler(async (req, res) => {
   console.log(req.params);
@@ -172,16 +176,32 @@ const getProduct = asyncHandler(async (req, res) => {
       .json(new ApiResponse(400, null, `single Product error: ${error}`));
   }
 });
-
+/**
+ * todo : Delete product annd see all Field
+ */
 const DeleteProduct = asyncHandler(async (req, res) => {
   try {
-    await productModel.findOneAndDelete({
+    // fs.unlink();
+
+    const deletedProduct = await productModel.findOneAndDelete({
       _id: req.params?.id,
     });
 
+    const deleteImagePath = path.join(
+      "./public/temp/",
+      deletedProduct?.image?.split("/").slice(3).join("/")
+    );
+
+    fs.unlink(deleteImagePath, (err) => {
+      if (err) {
+        return res
+          .status(400)
+          .json(new ApiResponse(400, null, `single Product error: ${err}`));
+      }
+    });
     return res
       .status(200)
-      .json(new ApiResponse(200, null, "Delete product Sucessfull"));
+      .json(new ApiResponse(200, deletedProduct, "Delete product Sucessfull"));
   } catch (error) {
     return res
       .status(400)
