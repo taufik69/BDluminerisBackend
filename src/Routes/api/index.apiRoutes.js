@@ -11,6 +11,7 @@ import groupRoutes from "./group.apiRoutes.js";
 import serisRoutes from "./seris.apiRoutes.js";
 import subSerisRoutes from "./subSeris.apiRoutes.js";
 import productSpecificationRoutes from "./productSpecification.apiRoutes.js";
+import productRoutes from "./product.ApiRoutes.js";
 
 const router = Router();
 router.use(process.env.CONPANY_NAME_ROUTE, utilsRoutes);
@@ -25,6 +26,6 @@ router.use(process.env.CONPANY_NAME_ROUTE, groupRoutes);
 router.use(process.env.CONPANY_NAME_ROUTE, serisRoutes);
 router.use(process.env.CONPANY_NAME_ROUTE, subSerisRoutes);
 router.use(process.env.CONPANY_NAME_ROUTE, productSpecificationRoutes);
-router.use(process.env.CONPANY_NAME_ROUTE, productRoute);
+router.use(process.env.CONPANY_NAME_ROUTE, productRoutes);
 
 export default router;
