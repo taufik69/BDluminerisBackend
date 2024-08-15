@@ -29,6 +29,13 @@ const SerisSchema = new Schema(
         required: [true, "Missing productspecification !!"],
       },
     ],
+
+    product: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "product",
+      },
+    ],
   },
   { timestamps: true }
 );

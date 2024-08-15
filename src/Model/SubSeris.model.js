@@ -19,6 +19,12 @@ const subSerisSchema = new Schema(
         required: [true, "Missing productspecification !!"],
       },
     ],
+    product: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "product",
+      },
+    ],
   },
   { timestamps: true }
 );

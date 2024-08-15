@@ -70,7 +70,6 @@ const productspecificationcontroller = asyncHandler(async (req, res) => {
       .json(new ApiError(400, null, `This product  is Already Exist `));
   }
 
-
   /**
    * todo : save data on database
    */
@@ -82,26 +81,26 @@ const productspecificationcontroller = asyncHandler(async (req, res) => {
    * todo : now store the product in the seris database
    */
 
-  // if (req.body?.productSubSeris) {
-  //   await subserisModel.findOneAndUpdate(
-  //     {
-  //       _id: req.body?.productSubSeris,
-  //     },
-  //     {
-  //       $push: { productTechnicalSpecification: productSpecification._id },
-  //     },
-  //     { new: true }
-  //   );
-  // }
-  // await serisModel.findOneAndUpdate(
-  //   {
-  //     _id: req.body?.productSeris,
-  //   },
-  //   {
-  //     $push: { productTechnicalSpecification: productSpecification._id },
-  //   },
-  //   { new: true }
-  // );
+  if (req.body?.productSubSeris) {
+    await subserisModel.findOneAndUpdate(
+      {
+        _id: req.body?.productSubSeris,
+      },
+      {
+        $push: { productTechnicalSpecification: productSpecification._id },
+      },
+      { new: true }
+    );
+  }
+  await serisModel.findOneAndUpdate(
+    {
+      _id: req.body?.productSeris,
+    },
+    {
+      $push: { productTechnicalSpecification: productSpecification._id },
+    },
+    { new: true }
+  );
 
   return res
     .status(200)

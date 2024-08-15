@@ -8,7 +8,12 @@ const productSchema = new Schema(
       required: [true, "Missing cct Crendential"],
       lowercase: true,
     },
-    Productimage: {
+    productItemCode: {
+      type: String,
+      trim: true,
+      required: [true, "Missing productItemCode "],
+    },
+    image: {
       type: String,
       required: [true, "Missing product image"],
     },
@@ -16,18 +21,24 @@ const productSchema = new Schema(
       type: Number,
       required: [true, "Missing product MRP"],
     },
+    productPriority: {
+      type: Number,
+      required: [true, "Missing productPriority"],
+    },
     productDescription: {
       type: String,
       required: [true, "Missing productDescription"],
-      default: "",
+      default: null,
     },
     seris: {
       type: Schema.Types.ObjectId,
       ref: "seris",
+      default: null,
     },
     subseris: {
       type: Schema.Types.ObjectId,
       ref: "subseris",
+      default: null,
     },
   },
   { timestamps: true }
